@@ -73,6 +73,9 @@ gantt
     Documentation and final report :a8, 2026-01-7, 2026-04-30
 ```
 ---
+## Large Project Writeup
+You can find the full writeup of this project either in the [documentation folder]() or at this [Overleaf link](https://www.overleaf.com/read/ptbwqxwbtbks#01d24c) 
+---
 
 ## References and Initial Resources
 
