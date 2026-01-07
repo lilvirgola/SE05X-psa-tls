@@ -91,5 +91,5 @@ You can find the full writeup of this project either in the [documentation folde
 - Discussion on secure element integration with TLS stacks:  
   https://github.com/zephyrproject-rtos/zephyr/discussions/74217
 
-- Example on mbedOS and mbedTLS
-  https://github.com/ARMmbed/mbed-os-example-tls
+- Tutorials on mbedOS 
+  https://os.mbed.com/docs/mbed-os/v6.8/tutorials/index.html
