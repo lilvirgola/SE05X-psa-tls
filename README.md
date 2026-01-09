@@ -22,27 +22,30 @@ The hardware requirements for the project are minimal:
 
 The project will be structured into the following phases as described in the gantt after this section:
 
-### Phase 1: Research and Environment Setup
+### Phase 1: Planning and Research
+
+#### Sub-Phase 1: Research and Environment Setup
 
 Configuration of the development environment, analysis of the existing SE05X driver implementation, study of mbed OS and zhephyr (that seems more used and modern but is less documented), mbed TLS (that will be the tls abstraction lib that I plan to use), and PSA Crypto standard and how it works, and selection of the MQTT/TLS software stack.
 
-### Phase 2: Secure Element Capability Validation
+#### Sub-Phase 2: Secure Element and Driver Analisys
 
-Validation of SE050 cryptographic capabilities using the existing driver as a baseline, testing of key generation, signing, verification, and encryption primitives, and verification of secure key storage and access constraints.
+Validation of SE050 cryptographic capabilities using the existing [driver](https://github.com/matthias-ku/SE05X_Final) as a baseline, testing of key generation, signing, verification, and encryption primitives, and verification of secure key storage and access constraints and driver analisys.
 
-### Phase 3: PSA Crypto Driver Integration
+### Phase 2: PSA Crypto Driver Integration
 
-Design and implementation of a PSA-compatible driver for the SE050, mapping of PSA key attributes and policies to secure element objects, enforcement of key opacity and usage restrictions, and integration with mbed TLS through the PSA Crypto layer.
+Design and implementation of a PSA-compatible wrapper for the SE050 over the [SE05X driver](https://github.com/matthias-ku/SE05X_Final), mapping of PSA key attributes and policies to secure element objects, enforcement of key opacity and usage restrictions, and integration with mbed TLS through the PSA Crypto layer.
 
-### Phase 4: Secure Communication Demonstration
+### Phase 3: Secure Communication Demonstration
 
-Development of an MQTT client running on the Portenta board, TLS client authentication using keys stored in the secure element, and end-to-end encrypted and authenticated communication with a Raspberry Pi MQTT broker.
+Development of an MQTT client example running on the Portenta board, TLS client authentication using keys stored in the secure element, and end-to-end encrypted and authenticated communication with a MQTT broker.
 
-### Phase 5: Performance and Security Evaluation (optional)
+### Phase 4
+#### Sub-Phase 1: Performance and Security Evaluation (optional)
 
 Measurement of memory usage, CPU load, and latency, comparison with a software-only TLS implementation, and qualitative discussion of the resulting security properties.
 
-### Phase 6: Documentation and Finalization
+#### Sub-Phase 2: Documentation and Finalization
 
 Preparation of the final report for the large project, will mostly be done in parallel to the project.
 
@@ -85,11 +88,11 @@ You can find the full writeup of this project either in the [documentation folde
 - Zephyr main page:
   https://www.zephyrproject.org/
 
-- mbed TLS documentation and source code:  
+- mbed TLS documentation and source code:
   https://github.com/Mbed-TLS/mbedtls
 
-- Discussion on secure element integration with TLS stacks:  
+- Discussion on secure element integration with TLS stacks:
   https://github.com/zephyrproject-rtos/zephyr/discussions/74217
 
-- Tutorials on mbedOS 
+- Tutorials on mbedOS:
   https://os.mbed.com/docs/mbed-os/v6.8/tutorials/index.html
