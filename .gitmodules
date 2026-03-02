@@ -1,0 +1,7 @@
+[submodule "lib/se05x"]
+	path = lib/se05x
+	url = https://github.com/matthias-ku/SE05X_Final
+[submodule "third_party/mbedtls"]
+	path = third_party/mbedtls
+	url = https://github.com/Mbed-TLS/mbedtls.git
+	branch = mbedtls-3.6

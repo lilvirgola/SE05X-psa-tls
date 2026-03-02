@@ -1,0 +1,48 @@
+#ifndef MBEDTLS_CONFIG_H
+#define MBEDTLS_CONFIG_H
+
+
+/* Platform / Bare Metal     */
+#define MBEDTLS_PLATFORM_C
+#define MBEDTLS_PLATFORM_MEMORY
+#define MBEDTLS_MEMORY_BUFFER_ALLOC_C
+#define MBEDTLS_PLATFORM_NO_STD_FUNCTIONS
+#define MBEDTLS_NO_PLATFORM_ENTROPY
+#define MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES
+
+/* PSA Core */
+
+#define MBEDTLS_PSA_CRYPTO_C
+#define MBEDTLS_USE_PSA_CRYPTO
+
+/* Required by TLS for PSA */
+#define MBEDTLS_PSA_CRYPTO_CONFIG
+
+/* TLS Layer Only */
+
+#define MBEDTLS_SSL_CLI_C
+#define MBEDTLS_SSL_TLS_C
+#define MBEDTLS_SSL_PROTO_TLS1_2
+
+#define MBEDTLS_SSL_MAX_CONTENT_LEN 4096
+
+/* X.509 (minimal) */
+
+#define MBEDTLS_X509_USE_C
+#define MBEDTLS_X509_CRT_PARSE_C
+#define MBEDTLS_OID_C
+#define MBEDTLS_ASN1_PARSE_C
+
+/* Only allow ECDHE-ECDSA with AES-128-GCM */
+#define MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
+
+/* Optional Debug */
+
+#ifdef CONFIG_MBEDTLS_DEBUG
+#define MBEDTLS_DEBUG_C
+#define MBEDTLS_ERROR_C
+#endif
+
+#include "mbedtls/check_config.h"
+
+#endif

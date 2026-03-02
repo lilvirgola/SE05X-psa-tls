@@ -1,76 +1,91 @@
 #include <Arduino.h>
-#include "SE05X.h"
+#include "psa_se05x_wrapper.h"
 
-void testECC();
-void testRSA();
-void testAES();
+#define AES_KEY_ID 666
+#define PLAINTEXT "Hello SE05X PSA!"
+#define PLAINTEXT_LEN (sizeof(PLAINTEXT)-1)
+
+uint8_t ciphertext[64];
+size_t ciphertext_len = sizeof(ciphertext);
+
+uint8_t decrypted[64];
+size_t decrypted_len = sizeof(decrypted);
+
+uint8_t hash[32];
+size_t hash_len = sizeof(hash);
+
+void printHex(const uint8_t *buf, size_t len) {
+    for (size_t i = 0; i < len; i++) {
+        if (buf[i] < 0x10) Serial.print("0");
+        Serial.print(buf[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.println();
+}
 
 void setup() {
     Serial.begin(115200);
-    while (!Serial);
+    while(!Serial);
 
-    if (SE05X.begin() != 1) {
-        Serial.println("SE05X init failed");
-        while(1);
+    Serial.println("=== PSA SE05X Test ===");
+
+    if (psa_se05x_init() != PSA_SUCCESS) {
+        Serial.println("Failed to init SE05X wrapper");
+        return;
     }
-    Serial.println("SE05X initialized");
-}
 
+    // Generate random AES key
+    uint8_t key[16];
+    if (psa_se05x_generate_random(key, sizeof(key)) != PSA_SUCCESS) {
+        Serial.println("Failed to generate random key");
+        return;
+    }
+    Serial.print("Random key: ");
+    printHex(key, sizeof(key));
+
+    // Import AES key
+    psa_key_handle_t key_handle = AES_KEY_ID;
+    psa_key_attributes_t attr;
+    psa_set_key_type(&attr, PSA_KEY_TYPE_AES);
+    psa_set_key_bits(&attr, 128);
+    psa_status_t status = psa_se05x_import_key(&attr, key, sizeof(key), &key_handle);
+    if (status != PSA_SUCCESS) {
+        Serial.println("Failed to import AES key");
+        Serial.print("Error code: ");
+        Serial.println(status);
+        return;
+    }
+    Serial.println("AES key imported");
+
+    // Hash plaintext
+    if (psa_se05x_hash_compute(PSA_ALG_SHA_256, (const uint8_t*)PLAINTEXT, PLAINTEXT_LEN,
+                               hash, sizeof(hash), &hash_len) != PSA_SUCCESS) {
+        Serial.println("SHA-256 failed");
+        return;
+    }
+    Serial.print("SHA-256: ");
+    printHex(hash, hash_len);
+
+    // AES ECB encrypt
+    if (psa_se05x_aes_encrypt(key_handle, 0, (const uint8_t*)PLAINTEXT, PLAINTEXT_LEN,
+                              ciphertext, sizeof(ciphertext), &ciphertext_len) != PSA_SUCCESS) {
+        Serial.println("AES encrypt failed");
+        return;
+    }
+    Serial.print("Ciphertext: ");
+    printHex(ciphertext, ciphertext_len);
+
+    // AES ECB decrypt
+    if (psa_se05x_aes_decrypt(key_handle, 0, ciphertext, ciphertext_len,
+                              decrypted, sizeof(decrypted), &decrypted_len) != PSA_SUCCESS) {
+        Serial.println("AES decrypt failed");
+        return;
+    }
+    Serial.print("Decrypted: ");
+    Serial.write(decrypted, decrypted_len);
+    Serial.println();
+}
 
 void loop() {
-    testECC();
-    testRSA();
-    testAES();
-    delay(5000);
-}
-
-void testECC() {
-    byte pubKey[64];
-    size_t pubLen;
-
-    int keyID = 0x1234;
-
-    if (SE05X.generatePrivateKey(keyID, pubKey, sizeof(pubKey), &pubLen)) {
-        Serial.println("ECC keypair generated");
-        Serial.print("Public key: ");
-        for (size_t i = 0; i < pubLen; i++) {
-            Serial.print(pubKey[i], HEX); Serial.print(" ");
-        }
-        Serial.println();
-    } else {
-        Serial.println("ECC keypair generation failed");
-    }
-}
-
-void testRSA() {
-    byte modulus[256];
-    byte exponent[3];
-    size_t modLen = sizeof(modulus);
-    size_t expLen = sizeof(exponent);
-
-    int keyID = 0x5678;
-
-    if (SE05X.generatePrivateRSAKey(keyID, modulus, &modLen, exponent, &expLen, 2048)) {
-        Serial.println("RSA keypair generated");
-    } else {
-        Serial.println("RSA keypair generation failed");
-    }
-}
-
-void testAES() {
-    byte key[16] = {0x00,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-    int keyID = 0x1001;
-    SE05X.writeAESKey(keyID, key, sizeof(key));
-
-    const byte plaintext[16] = {
-        'H','e','l','l','o',' ','S','E','0','5','0',' ','E','C','B','!'
-    };
-    byte ciphertext[16];
-    size_t ctLen;
-
-    if (SE05X.AES_ECB_encrypt(keyID, plaintext, sizeof(plaintext), ciphertext, &ctLen)) {
-        Serial.println("AES ECB encrypt success");
-    } else {
-        Serial.println("AES ECB encrypt failed");
-    }
+    // nothing
 }
