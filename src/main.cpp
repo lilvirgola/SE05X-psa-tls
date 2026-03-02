@@ -27,7 +27,7 @@ void setup() {
     Serial.begin(115200);
     while(!Serial);
 
-    Serial.println("=== PSA SE05X Test ===");
+    Serial.println("PSA SE05X Test");
 
     if (psa_se05x_init() != PSA_SUCCESS) {
         Serial.println("Failed to init SE05X wrapper");
@@ -46,6 +46,14 @@ void setup() {
     // Import AES key
     psa_key_handle_t key_handle = AES_KEY_ID;
     psa_key_attributes_t attr;
+    // assert the key ID is free
+    psa_status_t remove_status = psa_se05x_destroy_key(key_handle);
+    if (remove_status != PSA_SUCCESS) {
+        Serial.print("no key to remove: ");
+        Serial.println(remove_status);
+    } else {
+        Serial.println("Key removed successfully");
+    }
     psa_set_key_type(&attr, PSA_KEY_TYPE_AES);
     psa_set_key_bits(&attr, 128);
     psa_status_t status = psa_se05x_import_key(&attr, key, sizeof(key), &key_handle);
@@ -84,6 +92,15 @@ void setup() {
     Serial.print("Decrypted: ");
     Serial.write(decrypted, decrypted_len);
     Serial.println();
+
+    // remove AES key
+    remove_status = psa_se05x_destroy_key(key_handle);
+    if (remove_status != PSA_SUCCESS) {
+        Serial.print("Failed to remove key: ");
+        Serial.println(remove_status);
+    } else {
+        Serial.println("Key removed successfully");
+    }
 }
 
 void loop() {
