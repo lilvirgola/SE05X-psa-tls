@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# make sure certs directory exists
+mkdir -p certs
 # Generate self-signed CA
 openssl genrsa -out certs/ca.key 2048
 openssl req -new -x509 -days 3650 -key certs/ca.key -out certs/ca.crt \
