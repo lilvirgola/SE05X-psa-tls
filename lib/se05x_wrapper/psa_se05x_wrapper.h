@@ -165,6 +165,35 @@ psa_status_t psa_export_public_key(
     size_t data_size,
     size_t *data_length);
 
+psa_status_t psa_se05x_key_agreement(
+    psa_algorithm_t alg,
+    psa_key_handle_t private_key,
+    const uint8_t *peer_key,
+    size_t peer_key_length,
+    uint8_t *shared_secret,
+    size_t shared_secret_size,
+    size_t *shared_secret_length);
+
+psa_status_t psa_raw_key_agreement(
+    psa_algorithm_t alg,
+    psa_key_id_t private_key,
+    const uint8_t *peer_key,
+    size_t peer_key_length,
+    uint8_t *output,
+    size_t output_size,
+    size_t *output_length);
+
+psa_status_t psa_key_derivation_setup(
+    psa_key_derivation_operation_t *operation,
+    psa_algorithm_t alg); 
+    
+psa_status_t psa_key_derivation_key_agreement(
+    psa_key_derivation_operation_t *operation,
+    psa_key_derivation_step_t step,
+    mbedtls_svc_key_id_t private_key,
+    const uint8_t *peer_key,
+    size_t peer_key_length);
+
 #ifdef __cplusplus
 }
 #endif

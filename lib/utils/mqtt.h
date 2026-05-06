@@ -4,10 +4,11 @@
 #include "WiFiClient.h"
 #include "PubSubClient.h"
 #include "psa_se05x_wrapper.h"
+#include "utils.h"
 
-void mqtt_tls_receive(mbedtls_ssl_context *ssl);
-void mqtt_tls_ping(mbedtls_ssl_context *ssl);
-bool mqtt_tls_publish(mbedtls_ssl_context *ssl, const char *topic, const char *message);
+void mqtt_tls_receive(tls_context_t *ssl);
+void mqtt_tls_ping(tls_context_t *ssl);
+bool mqtt_tls_publish(tls_context_t *ssl, const char *topic, const char *message);
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length);
 
@@ -17,9 +18,7 @@ bool connect_mqtt_tls(
     const char *mqtt_client_id,
     const char *default_topic,
     int mqtt_port,
-    mbedtls_ssl_context *ssl,
-    mbedtls_ssl_config *conf,
-    mbedtls_x509_crt *cacert,
+    tls_context_t *tls,
     int (*wifi_send)(void *ctx, const unsigned char *buf, size_t len),
     int (*wifi_recv)(void *ctx, unsigned char *buf, size_t len));
 

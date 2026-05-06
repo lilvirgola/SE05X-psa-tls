@@ -4,3 +4,7 @@
 .vscode/launch.json
 .vscode/ipch
 include/arduino_secrets.h
+include/ca_cert.h
+hotspot.sh
+mqtt/certs/*
+mqtt/ca_cert.h

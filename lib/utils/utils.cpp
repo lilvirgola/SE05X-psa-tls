@@ -13,9 +13,6 @@
 #include "mbedtls/ssl.h"
 #include "mbedtls/net_sockets.h"
 
-// String serial_buffer = "";
-// bool message_ready = false;
-
 // WiFi to mbedTLS glue layer
 
 int wifi_send(void *ctx, const unsigned char *buf, size_t len)
@@ -48,12 +45,29 @@ int wifi_recv(void *ctx, unsigned char *buf, size_t len)
 
 void connect_wifi(const char *ssid, const char *pass)
 {
+    // scan for networks
+    Serial.println("Scanning for WiFi networks...");
+    int num_networks = WiFi.scanNetworks();
+    if (num_networks == 0) {
+        Serial.println("No WiFi networks found");
+    } else {
+        Serial.print(num_networks);        Serial.println(" WiFi networks found:");
+        for (int i = 0; i < num_networks; i++) {
+            Serial.print("  ");Serial.print(i + 1);
+            Serial.print(": ");Serial.print(WiFi.SSID(i));
+            Serial.print(" (");Serial.print(WiFi.RSSI(i));Serial.print(" dBm)");
+            Serial.print(" Encryption: ");Serial.println(WiFi.encryptionType(i));
+        }
+    }
     Serial.println("Connecting to WiFi...");
-
-    while (WiFi.begin(ssid, pass) != WL_CONNECTED)
+    int code = WiFi.begin(ssid, pass);
+    while (code != WL_CONNECTED)
     {
+        Serial.print("Connection failed with code ");        
+        Serial.println(code);
         delay(3000);
         Serial.println("Retrying WiFi connection...");
+        code = WiFi.begin(ssid, pass);
     }
 
     Serial.println("WiFi connected");
@@ -79,10 +93,19 @@ void setup_psa_key(psa_key_id_t *key_id)
     
     psa_set_key_type(&attr, PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_SECP_R1));
     psa_set_key_bits(&attr, 256);
-    psa_set_key_usage_flags(&attr, PSA_KEY_USAGE_SIGN_HASH | PSA_KEY_USAGE_VERIFY_HASH);
+    psa_set_key_usage_flags(&attr, PSA_KEY_USAGE_SIGN_HASH);
     psa_set_key_algorithm(&attr, PSA_ALG_ECDSA(PSA_ALG_SHA_256));
+    psa_set_key_lifetime(&attr, PSA_KEY_LIFETIME_VOLATILE);
     psa_set_key_id(&attr, *key_id);
-    psa_set_key_lifetime(&attr, PSA_KEY_LIFETIME_PERSISTENT);
+
+
+    Serial.print("[setup_psa_key] attr type=0x"); Serial.println(psa_get_key_type(&attr), HEX);
+    Serial.print("[setup_psa_key] attr bits="); Serial.println(psa_get_key_bits(&attr));
+    Serial.print("[setup_psa_key] attr usage=0x"); Serial.println(psa_get_key_usage_flags(&attr), HEX);
+    Serial.print("[setup_psa_key] attr alg=0x"); Serial.println(psa_get_key_algorithm(&attr), HEX);
+    Serial.print("[setup_psa_key] attr id="); Serial.println(psa_get_key_id(&attr));
+    Serial.print("[setup_psa_key] attr lifetime=0x"); Serial.println(psa_get_key_lifetime(&attr), HEX);
+
 
     psa_status_t status = psa_generate_key(&attr, key_id);
     
@@ -125,143 +148,161 @@ void setup_psa_key(psa_key_id_t *key_id)
     }
 }
 
-
-// Process serial commands
-
-// void process_serial_command(String command, PubSubClient &mqttClient, const char* default_topic)
-// {
-//     command.trim();
-    
-//     if (command.length() == 0)
-//     {
-//         return;
-//     }
-    
-//     // Check for special commands
-//     if (command.startsWith("/"))
-//     {
-//         if (command.equals("/help"))
-//         {
-//             Serial.println("\n--- Available Commands ---");
-//             Serial.println("Type any message to publish to default topic");
-//             Serial.println("/help                 - Show this help");
-//             Serial.println("/status               - Show connection status");
-//             Serial.println("/pub <topic> <msg>    - Publish to specific topic");
-//             Serial.println("/sub <topic>          - Subscribe to topic");
-//             Serial.println("/unsub <topic>        - Unsubscribe from topic");
-//             Serial.println("---------------------------\n");
-//         }
-//         else if (command.equals("/status"))
-//         {
-//             Serial.println("\n--- Status ---");
-//             Serial.print("WiFi: ");
-//             Serial.println(WiFi.status() == WL_CONNECTED ? "Connected" : "Disconnected");
-//             Serial.print("MQTT: ");
-//             Serial.println(mqttClient.connected() ? "Connected" : "Disconnected");
-//             Serial.print("Default topic: ");
-//             Serial.println(default_topic);
-//             Serial.println("--------------\n");
-//         }
-//         else if (command.startsWith("/pub "))
-//         {
-//             int first_space = command.indexOf(' ', 5);
-//             if (first_space > 0)
-//             {
-//                 String topic = command.substring(5, first_space);
-//                 String message = command.substring(first_space + 1);
-                
-//                 if (mqttClient.publish(topic.c_str(), message.c_str()))
-//                 {
-//                     Serial.print("Published to ");
-//                     Serial.print(topic);
-//                     Serial.print(": ");
-//                     Serial.println(message);
-//                 }
-//                 else
-//                 {
-//                     Serial.println("ERROR: Publish failed");
-//                 }
-//             }
-//             else
-//             {
-//                 Serial.println("ERROR: Usage - /pub <topic> <message>");
-//             }
-//         }
-//         else if (command.startsWith("/sub "))
-//         {
-//             String topic = command.substring(5);
-//             topic.trim();
-            
-//             if (mqttClient.subscribe(topic.c_str()))
-//             {
-//                 Serial.print("Subscribed to: ");
-//                 Serial.println(topic);
-//             }
-//             else
-//             {
-//                 Serial.println("ERROR: Subscribe failed");
-//             }
-//         }
-//         else if (command.startsWith("/unsub "))
-//         {
-//             String topic = command.substring(7);
-//             topic.trim();
-            
-//             if (mqttClient.unsubscribe(topic.c_str()))
-//             {
-//                 Serial.print("Unsubscribed from: ");
-//                 Serial.println(topic);
-//             }
-//             else
-//             {
-//                 Serial.println("ERROR: Unsubscribe failed");
-//             }
-//         }
-//         else
-//         {
-//             Serial.println("Unknown command. Type /help for available commands.");
-//         }
-//     }
-//     else
-//     {
-//         // Publish to default topic
-//         if (mqttClient.publish(default_topic, command.c_str()))
-//         {
-//             Serial.print("Published: ");
-//             Serial.println(command);
-//         }
-//         else
-//         {
-//             Serial.println("ERROR: Publish failed");
-//         }
-//     }
-// }
+typedef struct {
+    mbedtls_ssl_context ssl;
+    mbedtls_ssl_config conf;
+    mbedtls_x509_crt cacert;
+} tls_context_t;
 
 
-// void handle_serial_input(PubSubClient &mqttClient, const char* default_topic)
-// {
-//     while (Serial.available() > 0)
-//     {
-//         char c = Serial.read();
-        
-//         if (c == '\n' || c == '\r')
-//         {
-//             if (serial_buffer.length() > 0)
-//             {
-//                 message_ready = true;
-//             }
-//         }
-//         else
-//         {
-//             serial_buffer += c;
-//         }
-//     }
-    
-//     if (message_ready)
-//     {
-//         process_serial_command(serial_buffer, mqttClient, default_topic);
-//         serial_buffer = "";
-//         message_ready = false;
-//         Serial.print("> ");
-//     }
-// }
+// Generic TLS connect (SE05X-backed via PSA)
+bool tls_connect(
+    tls_context_t *tls,
+    WiFiClient *tcpClient,
+    const char *hostname,
+    int port,
+    const unsigned char *ca_cert,
+    size_t ca_cert_len)
+{
+    Serial.println("\n=== TLS CONNECT (SE05X) ===");
+
+    // --- PSA INIT ---
+    if (psa_crypto_init() != PSA_SUCCESS) {
+        Serial.println("ERROR: PSA init failed");
+        return false;
+    }
+
+    // --- TCP ---
+    Serial.print("Connecting to ");
+    Serial.print(hostname);
+    Serial.print(":");
+    Serial.println(port);
+
+    if (!tcpClient->connect(hostname, port)) {
+        Serial.println("ERROR: TCP connect failed");
+        return false;
+    }
+
+    Serial.println("TCP connected");
+
+    // --- INIT ---
+    mbedtls_ssl_init(&tls->ssl);
+    mbedtls_ssl_config_init(&tls->conf);
+    mbedtls_x509_crt_init(&tls->cacert);
+
+    // --- LOAD CA ---
+    int ret = mbedtls_x509_crt_parse(
+        &tls->cacert,
+        ca_cert,
+        ca_cert_len);
+
+    if (ret != 0) {
+        Serial.print("ERROR: CA parse failed: 0x");
+        Serial.println(-ret, HEX);
+        return false;
+    }
+
+    // --- CONFIG ---
+    ret = mbedtls_ssl_config_defaults(
+        &tls->conf,
+        MBEDTLS_SSL_IS_CLIENT,
+        MBEDTLS_SSL_TRANSPORT_STREAM,
+        MBEDTLS_SSL_PRESET_DEFAULT);
+
+    if (ret != 0) {
+        Serial.print("ERROR: SSL config failed: 0x");
+        Serial.println(-ret, HEX);
+        return false;
+    }
+
+    // NOTE: this needs to be fixed to support proper certificate verification.
+    mbedtls_ssl_conf_authmode(&tls->conf, MBEDTLS_SSL_VERIFY_NONE);
+
+    // --- SE05X RNG ---
+    mbedtls_ssl_conf_rng(&tls->conf, mbedtls_psa_get_random, NULL);
+
+    // --- SETUP ---
+    ret = mbedtls_ssl_setup(&tls->ssl, &tls->conf);
+    if (ret != 0) {
+        Serial.print("ERROR: SSL setup failed: 0x");
+        Serial.println(-ret, HEX);
+        return false;
+    }
+
+    mbedtls_ssl_set_hostname(&tls->ssl, hostname);
+    mbedtls_ssl_set_bio(&tls->ssl, tcpClient, wifi_send, wifi_recv, NULL);
+
+    // --- HANDSHAKE ---
+    Serial.println("Starting TLS handshake...");
+
+    int retry = 0;
+    while ((ret = mbedtls_ssl_handshake(&tls->ssl)) != 0) {
+
+        if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
+            ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
+
+            Serial.print("ERROR: Handshake failed: 0x");
+            Serial.println(-ret, HEX);
+            return false;
+        }
+
+        if (++retry > 500) {
+            Serial.println("ERROR: Handshake timeout");
+            return false;
+        }
+
+        delay(10);
+    }
+
+    Serial.println("TLS handshake complete!");
+    Serial.print("Cipher: ");
+    Serial.println(mbedtls_ssl_get_ciphersuite(&tls->ssl));
+
+    return true;
+}
+
+
+// TLS write wrapper
+int tls_write(tls_context_t *tls, const uint8_t *buf, size_t len)
+{
+    int ret;
+
+    do {
+        ret = mbedtls_ssl_write(&tls->ssl, buf, len);
+    } while (ret == MBEDTLS_ERR_SSL_WANT_READ ||
+             ret == MBEDTLS_ERR_SSL_WANT_WRITE);
+
+    return ret;
+}
+
+
+// TLS read wrapper
+int tls_read(tls_context_t *tls, uint8_t *buf, size_t len)
+{
+    int ret;
+    int retry = 0;
+    const int max_retries = 500;
+
+    do {
+        ret = mbedtls_ssl_read(&tls->ssl, buf, len);
+        if (ret == MBEDTLS_ERR_SSL_WANT_READ ||
+            ret == MBEDTLS_ERR_SSL_WANT_WRITE) {
+            if (++retry > max_retries) {
+                Serial.println("Warn: TLS read timeout");
+                return MBEDTLS_ERR_SSL_WANT_READ;
+            }
+            delay(10);
+        }
+    } while (ret == MBEDTLS_ERR_SSL_WANT_READ ||
+             ret == MBEDTLS_ERR_SSL_WANT_WRITE);
+
+    return ret;
+}
+
+// TLS close wrapper
+void tls_close(tls_context_t *tls)
+{    mbedtls_ssl_close_notify(&tls->ssl);
+    mbedtls_ssl_free(&tls->ssl);
+    mbedtls_ssl_config_free(&tls->conf);
+    mbedtls_x509_crt_free(&tls->cacert);
+}

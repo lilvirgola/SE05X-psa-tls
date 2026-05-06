@@ -6,6 +6,7 @@
 #include "ca_cert.h"
 #include "psa_se05x_wrapper.h"
 #include "mbedtls_psa_glue.h"
+#include "utils.h"
 
 #include "psa/crypto.h"
 #include "mbedtls/ssl.h"
@@ -67,6 +68,7 @@ bool connect_mqtt_plain(
 }
 
 // MQTT connection with TLS
+
 
 // MQTT packet construction helpers
 
@@ -229,7 +231,7 @@ void mqtt_parse_packet(uint8_t *buf, int len)
             break;
             
         case 0xD0: // PINGRESP
-            // Silent - this is just keepalive
+            // just keepalive
             break;
             
         default:
@@ -246,210 +248,104 @@ bool connect_mqtt_tls(
     const char *mqtt_client_id,
     const char *default_topic,
     int mqtt_port,
-    mbedtls_ssl_context *ssl,
-    mbedtls_ssl_config *conf,
-    mbedtls_x509_crt *cacert,
+    tls_context_t *tls,
     int (*wifi_send)(void *ctx, const unsigned char *buf, size_t len),
     int (*wifi_recv)(void *ctx, unsigned char *buf, size_t len))
 {
-    Serial.println("\n=== MQTT over TLS Connection ===");
-    
-    // TCP connect
-    Serial.print("Connecting to ");
-    Serial.print(mqtt_server);
-    Serial.print(":");
-    Serial.println(mqtt_port);
-    
-    if (!tcpClient->connect(mqtt_server, mqtt_port)) {
-        Serial.println("ERROR: TCP connection failed");
+    Serial.println("\n---MQTT over TLS Connection ---");
+
+    // TLS CONNECT process
+    if (!tls_connect(tls,
+                     tcpClient,
+                     mqtt_server,
+                     mqtt_port,
+                     (const unsigned char*)ca_cert_pem,
+                     ca_cert_pem_len))
+    {
+        Serial.println("ERROR: TLS connection failed");
         return false;
     }
-    
-    Serial.println("TCP connected");
-    delay(200);
-    
-    // TLS setup
-    Serial.println("Setting up TLS...");
-    
-    mbedtls_ssl_init(ssl);
-    mbedtls_ssl_config_init(conf);
-    mbedtls_x509_crt_init(cacert);
-    
-    // Load CA certificate
-    int ret = mbedtls_x509_crt_parse(cacert, (const unsigned char*)ca_cert_pem, ca_cert_pem_len);
-    if (ret != 0) {
-        Serial.print("ERROR: CA cert parse failed: 0x");
-        Serial.println(-ret, HEX);
-        return false;
-    }
-    
-    ret = mbedtls_ssl_config_defaults(
-        conf,
-        MBEDTLS_SSL_IS_CLIENT,
-        MBEDTLS_SSL_TRANSPORT_STREAM,
-        MBEDTLS_SSL_PRESET_DEFAULT);
-    
-    if (ret != 0) {
-        Serial.print("ERROR: SSL config failed: 0x");
-        Serial.println(-ret, HEX);
-        return false;
-    }
-    
-    // Disable cert verification for now (we'll fix the cert later)
-    mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_NONE);
-    
-    // Use hardware-backed RNG from SE05X
-    Serial.println("Configuring SE05X hardware RNG...");
-    mbedtls_ssl_conf_rng(conf, mbedtls_psa_get_random, NULL);
-    
-    ret = mbedtls_ssl_setup(ssl, conf);
-    if (ret != 0) {
-        Serial.print("ERROR: SSL setup failed: 0x");
-        Serial.println(-ret, HEX);
-        return false;
-    }
-    
-    mbedtls_ssl_set_hostname(ssl, mqtt_server);
-    mbedtls_ssl_set_bio(ssl, tcpClient, wifi_send, wifi_recv, NULL);
-    
-    // TLS handshake
-    Serial.println("Starting TLS handshake...");
-    int retry = 0;
-    while ((ret = mbedtls_ssl_handshake(ssl)) != 0) {
-        if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
-            Serial.print("ERROR: Handshake failed: 0x");
-            Serial.println(-ret, HEX);
-            return false;
-        }
-        
-        if (++retry > 500) {
-            Serial.println("ERROR: Handshake timeout");
-            return false;
-        }
-        
-        delay(10);
-    }
-    
-    Serial.println("TLS handshake complete!");
-    Serial.print("Cipher: ");
-    Serial.println(mbedtls_ssl_get_ciphersuite(ssl));
-    Serial.println("Using SE05X hardware random number generator");
-    
-    // Send MQTT CONNECT
+
+    // MQTT CONNECT packet
     Serial.println("Sending MQTT CONNECT...");
+    
     uint8_t connect_packet[128];
     int connect_len = mqtt_create_connect(connect_packet, mqtt_client_id, 60);
-    
-    ret = mbedtls_ssl_write(ssl, connect_packet, connect_len);
-    if (ret < 0) {
-        Serial.print("ERROR: Failed to send CONNECT: 0x");
-        Serial.println(-ret, HEX);
+
+    if (tls_write(tls, connect_packet, connect_len) < 0) {
+        Serial.println("ERROR: CONNECT send failed");
         return false;
     }
-    
-    // Wait for CONNACK
+
+    // CONNACK response
     Serial.println("Waiting for CONNACK...");
+    
     uint8_t response[256];
-    retry = 0;
+    int retry = 0;
 
     while (retry < 100) {
-        ret = mbedtls_ssl_read(ssl, response, sizeof(response));
-        
-        if (ret == MBEDTLS_ERR_SSL_WANT_READ || ret == MBEDTLS_ERR_SSL_WANT_WRITE) {
-            // No data yet, keep waiting
-            delay(10);
-            retry++;
-            continue;
-        }
-        
-        if (ret < 0) {
-            Serial.print("ERROR: Failed to read CONNACK: 0x");
-            Serial.println(-ret, HEX);
-            return false;
-        }
-        
+        int ret = tls_read(tls, response, sizeof(response));
+
         if (ret > 0) {
-            // Got CONNACK
             mqtt_parse_packet(response, ret);
             break;
         }
+
+        delay(10);
+        retry++;
     }
 
     if (retry >= 100) {
-        Serial.println("ERROR: Timeout waiting for CONNACK");
+        Serial.println("ERROR: CONNACK timeout");
         return false;
     }
 
-    
-    // Subscribe to topic
+    // SUBSCRIBE packet
     Serial.print("Subscribing to: ");
     Serial.println(default_topic);
+
     uint8_t subscribe_packet[128];
     int subscribe_len = mqtt_create_subscribe(subscribe_packet, default_topic, 1);
-    
-    ret = mbedtls_ssl_write(ssl, subscribe_packet, subscribe_len);
-    if (ret < 0) {
-        Serial.print("ERROR: Failed to send SUBSCRIBE: 0x");
-        Serial.println(-ret, HEX);
+
+    if (tls_write(tls, subscribe_packet, subscribe_len) < 0) {
+        Serial.println("ERROR: SUBSCRIBE failed");
         return false;
     }
-    
-    // Wait for SUBACK
-    ret = mbedtls_ssl_read(ssl, response, sizeof(response));
+
+    int ret = tls_read(tls, response, sizeof(response));
     if (ret > 0) {
         mqtt_parse_packet(response, ret);
     }
-    
-    Serial.println("\n=== MQTT-TLS Connected ===");
-    Serial.println("Type messages to publish");
-    Serial.print("> ");
-    
+
+    Serial.println("\n---MQTT-TLS Connected ---");
     return true;
 }
 
 // MQTT-TLS publish function
-bool mqtt_tls_publish(mbedtls_ssl_context *ssl, const char *topic, const char *message)
+bool mqtt_tls_publish(tls_context_t *tls, const char *topic, const char *message)
 {
     uint8_t publish_packet[512];
-    int publish_len = mqtt_create_publish(publish_packet, topic, message);
-    
-    int ret = mbedtls_ssl_write(ssl, publish_packet, publish_len);
-    if (ret < 0) {
-        Serial.print("ERROR: Publish failed: 0x");
-        Serial.println(-ret, HEX);
-        return false;
-    }
-    
-    return true;
+    int len = mqtt_create_publish(publish_packet, topic, message);
+
+    return tls_write(tls, publish_packet, len) > 0;
 }
 
 // MQTT-TLS receive function (non-blocking)
-void mqtt_tls_receive(mbedtls_ssl_context *ssl)
+void mqtt_tls_receive(tls_context_t *tls)
 {
-    uint8_t response[512];
-    
-    int ret = mbedtls_ssl_read(ssl, response, sizeof(response));
-    
-    if (ret == MBEDTLS_ERR_SSL_WANT_READ || ret == MBEDTLS_ERR_SSL_WANT_WRITE) {
-        // No data available - this is normal
-        return;
-    }
-    
-    if (ret < 0) {
-        Serial.print("ERROR: Read failed: 0x");
-        Serial.println(-ret, HEX);
-        return;
-    }
-    
+    uint8_t buf[512];
+
+    int ret = tls_read(tls, buf, sizeof(buf));
+
     if (ret > 0) {
-        mqtt_parse_packet(response, ret);
+        mqtt_parse_packet(buf, ret);
     }
 }
 
 // Send PINGREQ for keepalive
-void mqtt_tls_ping(mbedtls_ssl_context *ssl)
+void mqtt_tls_ping(tls_context_t *tls)
 {
-    uint8_t ping_packet[2];
-    mqtt_create_pingreq(ping_packet);
-    mbedtls_ssl_write(ssl, ping_packet, 2);
+    uint8_t pkt[2];
+    mqtt_create_pingreq(pkt);
+    tls_write(tls, pkt, 2);
 }

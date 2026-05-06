@@ -15,143 +15,6 @@
 #include "mbedtls/error.h"
 #include "utils.h"
 
-
-// TLS configuration
-
-void setup_tls(WiFiClient *tcpClient, mbedtls_ssl_context *ssl, mbedtls_ssl_config *conf, mbedtls_x509_crt *cacert,
-    int (*wifi_send)(void *ctx, const unsigned char *buf, size_t len), 
-    int (*wifi_recv)(void *ctx, unsigned char *buf, size_t len)
-)
-{
-    Serial.println("Setting up TLS connection...");
-    
-    mbedtls_ssl_init(ssl);
-    mbedtls_ssl_config_init(conf);
-    mbedtls_x509_crt_init(cacert);
-
-    int ret = mbedtls_ssl_config_defaults(
-        conf,
-        MBEDTLS_SSL_IS_CLIENT,
-        MBEDTLS_SSL_TRANSPORT_STREAM,
-        MBEDTLS_SSL_PRESET_DEFAULT);
-
-    if (ret != 0)
-    {
-        Serial.print("ERROR: SSL config defaults failed: 0x");
-        Serial.println(-ret, HEX);
-        while (1);
-    }
-
-    mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_NONE);
-    
-    Serial.println("Configuring hardware-backed RNG...");
-    mbedtls_ssl_conf_rng(conf, mbedtls_psa_get_random, NULL);
-
-    ret = mbedtls_ssl_setup(ssl, conf);
-    if (ret != 0)
-    {
-        Serial.print("ERROR: SSL setup failed: 0x");
-        Serial.println(-ret, HEX);
-        while (1);
-    }
-
-    mbedtls_ssl_set_hostname(ssl, "www.google.com");
-    mbedtls_ssl_set_bio(ssl, tcpClient, wifi_send, wifi_recv, NULL);
-                        
-    Serial.println("TLS setup complete");
-}
-
-// TLS handshake
-
-void perform_tls_handshake(WiFiClient *tcpClient, mbedtls_ssl_context *ssl)
-{
-    Serial.println("Starting TLS handshake...");
-
-    int ret;
-    int retry_count = 0;
-    int last_error = 0;
-    
-    while ((ret = mbedtls_ssl_handshake(ssl)) != 0)
-    {
-        // Print status every 50 iterations
-        if (retry_count % 50 == 0) {
-            Serial.print("Handshake status: 0x");
-            Serial.print(-ret, HEX);
-            
-            if (ret == MBEDTLS_ERR_SSL_WANT_READ) {
-                Serial.print(" (WANT_READ - waiting for data)");
-            } else if (ret == MBEDTLS_ERR_SSL_WANT_WRITE) {
-                Serial.print(" (WANT_WRITE - waiting to send)");
-            }
-            
-            // Check TCP connection status
-            Serial.print(" - TCP connected: ");
-            Serial.print(tcpClient->connected() ? "Yes" : "No");
-            Serial.print(", available: ");
-            Serial.println(tcpClient->available());
-        }
-        
-        if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
-            ret != MBEDTLS_ERR_SSL_WANT_WRITE)
-        {
-            char errbuf[128];
-            mbedtls_strerror(ret, errbuf, sizeof(errbuf));
-            Serial.print("ERROR: Handshake failed: 0x");
-            Serial.print(-ret, HEX);
-            Serial.print(" - ");
-            Serial.println(errbuf);
-            while (1);
-        }
-        
-        retry_count++;
-        
-        if (retry_count > 500) {
-            Serial.println("\nERROR: Handshake timeout after 500 iterations");
-            Serial.println("Last error was: 0x");
-            Serial.print(-ret, HEX);
-            Serial.println("\nTCP connection status:");
-            Serial.print("  Connected: ");
-            Serial.println(tcpClient->connected());
-            Serial.print("  Available bytes: ");
-            Serial.println(tcpClient->available());
-            while (1);
-        }
-        
-        delay(10);
-    }
-
-    Serial.println("\nTLS handshake complete");
-    
-    const char* cipher = mbedtls_ssl_get_ciphersuite(ssl);
-    Serial.print("Cipher suite: ");
-    Serial.println(cipher);
-}
-
-// HTTPS request
-
-void https_request(mbedtls_ssl_context *ssl)
-{
-    const char *req =
-        "GET / HTTP/1.1\r\n"
-        "Host: www.google.com\r\n"
-        "Connection: close\r\n\r\n";
-
-    Serial.println("Sending HTTPS request...");
-    mbedtls_ssl_write(ssl, (const unsigned char *)req, strlen(req));
-
-    unsigned char buf[512];
-    int len;
-
-    Serial.println("Reading response...");
-    while ((len = mbedtls_ssl_read(ssl, buf, sizeof(buf) - 1)) > 0)
-    {
-        buf[len] = 0;
-        Serial.print((char *)buf);
-    }
-    
-    Serial.println("\n\nHTTPS request complete");
-}
-
 // Hardware random number generation test
 
 void test_random_generation()
@@ -347,7 +210,7 @@ void test_rsa_operations()
 {
     Serial.println("\n--- RSA-2048 Test ---");
     
-    const psa_key_id_t rsa_key_id = 200;
+    const psa_key_id_t rsa_key_id = 100;
     
     SE05X.deleteBinaryObject(rsa_key_id);
     delay(50);
@@ -358,9 +221,9 @@ void test_rsa_operations()
     psa_set_key_usage_flags(&attr, PSA_KEY_USAGE_SIGN_HASH | PSA_KEY_USAGE_VERIFY_HASH);
     psa_set_key_algorithm(&attr, PSA_ALG_RSA_PKCS1V15_SIGN(PSA_ALG_SHA_256));
     psa_set_key_id(&attr, rsa_key_id);
-    psa_set_key_lifetime(&attr, PSA_KEY_LIFETIME_VOLATILE);
+    psa_set_key_lifetime(&attr, PSA_KEY_LIFETIME_PERSISTENT);
     
-    Serial.println("Generating RSA-2048 keypair (this may take 10-30 seconds)...");
+    Serial.println("Generating RSA-2048 keypair (this may take seconds)...");
     
     unsigned long start_time = millis();
     psa_key_handle_t key_handle = rsa_key_id;
@@ -410,3 +273,125 @@ void test_rsa_operations()
     
     psa_destroy_key(rsa_key_id);
 }
+
+void test_ecdhe_operations()
+{
+    Serial.println("\n--- ECDHE Key Agreement Test ---");
+
+    const psa_key_id_t key_id_A = 300;
+    const psa_key_id_t key_id_B = 301;
+
+    SE05X.deleteBinaryObject(key_id_A);
+    SE05X.deleteBinaryObject(key_id_B);
+    delay(50);
+
+    psa_key_attributes_t attr = PSA_KEY_ATTRIBUTES_INIT;
+
+    psa_set_key_type(&attr, PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_SECP_R1));
+    psa_set_key_bits(&attr, 256);
+    psa_set_key_usage_flags(&attr, PSA_KEY_USAGE_DERIVE);
+    psa_set_key_algorithm(&attr, PSA_ALG_ECDH);
+    psa_set_key_lifetime(&attr, PSA_KEY_LIFETIME_VOLATILE);
+
+    // --- Generate keypair A ---
+    psa_set_key_id(&attr, key_id_A);
+    psa_key_handle_t handle_A = key_id_A;
+    psa_status_t status = psa_generate_key(&attr, &handle_A);
+
+    if (status != PSA_SUCCESS) {
+        Serial.println("ERROR: Key A generation failed");
+        return;
+    }
+
+    // --- Generate keypair B ---
+    psa_set_key_id(&attr, key_id_B);
+    psa_key_handle_t handle_B = key_id_B;
+    status = psa_generate_key(&attr, &handle_B);
+
+    if (status != PSA_SUCCESS) {
+        Serial.println("ERROR: Key B generation failed");
+        return;
+    }
+
+    Serial.println("Keypairs generated");
+
+    // --- Export public keys ---
+    uint8_t pub_A[100], pub_B[100];
+    size_t pub_A_len = 0, pub_B_len = 0;
+
+    status = psa_export_public_key(handle_A, pub_A, sizeof(pub_A), &pub_A_len);
+    if (status != PSA_SUCCESS) {
+        Serial.println("ERROR: export pub_A failed");
+        return;
+    }
+
+    status = psa_export_public_key(handle_B, pub_B, sizeof(pub_B), &pub_B_len);
+    if (status != PSA_SUCCESS) {
+        Serial.println("ERROR: export pub_B failed");
+        return;
+    }
+
+    Serial.print("pub_A_len: "); Serial.println(pub_A_len);
+    Serial.print("pub_B_len: "); Serial.println(pub_B_len);
+
+    // --- Derive shared secrets ---
+    uint8_t secret_A[32], secret_B[32];
+    size_t len_A = 0, len_B = 0;
+
+    status = psa_raw_key_agreement(
+        PSA_ALG_ECDH,
+        handle_A,
+        pub_B, pub_B_len,
+        secret_A, sizeof(secret_A),
+        &len_A
+    );
+
+    if (status != PSA_SUCCESS) {
+        Serial.print("ERROR: ECDH A failed: 0x");
+        Serial.println(status, HEX);
+        return;
+    }
+
+    status = psa_raw_key_agreement(
+        PSA_ALG_ECDH,
+        handle_B,
+        pub_A, pub_A_len,
+        secret_B, sizeof(secret_B),
+        &len_B
+    );
+
+    if (status != PSA_SUCCESS) {
+        Serial.print("ERROR: ECDH B failed: 0x");
+        Serial.println(status, HEX);
+        return;
+    }
+
+    Serial.print("Secret A len: "); Serial.println(len_A);
+    Serial.print("Secret B len: "); Serial.println(len_B);
+
+    // --- Debug dump (first bytes only) ---
+    Serial.print("Secret A: ");
+    for (int i = 0; i < 8; i++) {
+        if (secret_A[i] < 0x10) Serial.print("0");
+        Serial.print(secret_A[i], HEX);
+    }
+    Serial.println("...");
+
+    Serial.print("Secret B: ");
+    for (int i = 0; i < 8; i++) {
+        if (secret_B[i] < 0x10) Serial.print("0");
+        Serial.print(secret_B[i], HEX);
+    }
+    Serial.println("...");
+
+    // --- Compare ---
+    if (len_A == len_B && memcmp(secret_A, secret_B, len_A) == 0) {
+        Serial.println("ECDHE test: PASS");
+    } else {
+        Serial.println("ECDHE test: FAIL (mismatch)");
+    }
+
+    psa_destroy_key(key_id_A);
+    psa_destroy_key(key_id_B);
+}
+
