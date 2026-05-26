@@ -110,9 +110,10 @@ void setup()
 
 unsigned long last_reconnect_attempt = 0;
 const unsigned long reconnect_interval = 2000;
+unsigned long messages_received = 0;
 
 void loop() {
-    Serial.println("\n--- Main loop ---");
+    // Serial.println("\n--- Main loop ---");
 
     // --- RECONNECT ---
     if (!mqtt_tls_connected && millis() - last_reconnect_attempt > reconnect_interval) {
@@ -139,6 +140,7 @@ void loop() {
     // --- RECEIVE MQTT ---
     if (mqtt_tls_connected) {
         mqtt_tls_receive(&tls);
+        messages_received++;
     }
 
     // --- KEEPALIVE ---

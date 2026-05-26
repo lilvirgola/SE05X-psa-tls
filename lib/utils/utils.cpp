@@ -288,7 +288,6 @@ int tls_read(tls_context_t *tls, uint8_t *buf, size_t len)
         if (ret == MBEDTLS_ERR_SSL_WANT_READ ||
             ret == MBEDTLS_ERR_SSL_WANT_WRITE) {
             if (++retry > max_retries) {
-                Serial.println("Warn: TLS read timeout");
                 return MBEDTLS_ERR_SSL_WANT_READ;
             }
             delay(10);

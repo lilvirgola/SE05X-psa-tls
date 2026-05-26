@@ -1,0 +1,2542 @@
+--- Terminal on /dev/ttyACM0 | 115200 8-N-1
+--- Available filters and text transformations: debug, default, direct, hexlify, log2file, nocontrol, printable, send_on_enter, time
+--- More details at https://bit.ly/pio-monitor-filters
+--- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+=== SE05X Reset ===
+SE05X ready
+SE05X cleared
+Scanning for WiFi networks...
+1 WiFi networks found:
+  1: Coruscant (-38 dBm) Encryption: 4
+Connecting to WiFi...
+WiFi connected
+IP address: 10.42.0.20
+Initializing PSA Crypto with SE05X...
+[setup_psa_key] attr type=0x7112
+[setup_psa_key] attr bits=256
+[setup_psa_key] attr usage=0x1400
+[setup_psa_key] attr alg=0x6000609
+[setup_psa_key] attr id=1
+[setup_psa_key] attr lifetime=0x1
+[psa_generate_key wrapper] type=0x7112
+se_id=1
+key_type=0x7112
+key_bits=256
+lifetime=0x1
+ECC branch
+ECC SECP256R1 branch
+SE05X_ext.generatePrivateKey ret=1
+Generated new SE05X key
+SE05X key ID: 1
+Private key secured in SE05X hardware
+Public key exported: 91 bytes
+
+=== Crypto tests ===
+
+
+--- Random Number Generation Test ---
+Generating 32 random bytes for mbedTLS...
+Generated 32 random bytes from SE05X:
+Random data: E4B3ED59AB42DE50934907BB61FA3E86...
+
+--- ECDSA Sign/Verify Test ---
+Computing SHA-256 hash...
+Hash computed: 32 bytes
+Signing with SE05X...
+Signature generated: 71 bytes (DER format)
+Verifying signature...
+Signature verified successfully
+
+--- AES-128 ECB Test ---
+[psa_generate_key wrapper] type=0x2400
+se_id=0
+key_type=0x2400
+key_bits=128
+lifetime=0x0
+AES branch
+AES-128 key generated
+Plaintext: 0123456789ABCDEF
+Encrypted 16 bytes
+Decryption verified
+AES test: PASS
+
+--- RSA-2048 Test ---
+Generating RSA-2048 keypair (this may take seconds)...
+[psa_generate_key wrapper] type=0x7001
+se_id=100
+key_type=0x7001
+key_bits=2048
+lifetime=0x1
+RSA branch
+RSA keypair generated in 1527 ms
+Generating 32 random bytes for mbedTLS...
+RSA signature generated: 32 bytes
+RSA test: PASS
+
+--- ECDHE Key Agreement Test ---
+[psa_generate_key wrapper] type=0x7112
+se_id=300
+key_type=0x7112
+key_bits=256
+lifetime=0x1
+ECC branch
+ECC SECP256R1 branch
+SE05X_ext.generatePrivateKey ret=1
+[psa_generate_key wrapper] type=0x7112
+se_id=301
+key_type=0x7112
+key_bits=256
+lifetime=0x1
+ECC branch
+ECC SECP256R1 branch
+SE05X_ext.generatePrivateKey ret=1
+Keypairs generated
+pub_A_len: 91
+pub_B_len: 91
+psa_raw_key_agreement called
+psa_raw_key_agreement called
+Secret A len: 32
+Secret B len: 32
+Secret A: C7E268DE8535825F...
+Secret B: C7E268DE8535825F...
+ECDHE test: PASS
+
+Crypto tests done
+
+=== MQTT over TLS ===
+
+
+---MQTT over TLS Connection ---
+
+=== TLS CONNECT (SE05X) ===
+Connecting to 10.42.0.1:8883
+TCP connected
+Starting TLS handshake...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+Generating 32 random bytes for mbedTLS...
+TLS handshake complete!
+Cipher: TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384
+Sending MQTT CONNECT...
+Waiting for CONNACK...
+MQTT: CONNACK received - Connected!
+Subscribing to: portenta/sensor
+MQTT: SUBACK received - Subscribed!
+
+---MQTT-TLS Connected ---
+Setup complete
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:38:30 PM CEST 2026 - Iteration: 1
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:39:00 PM CEST 2026 - Iteration: 2
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:39:30 PM CEST 2026 - Iteration: 3
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:40:00 PM CEST 2026 - Iteration: 4
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:40:30 PM CEST 2026 - Iteration: 5
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:41:00 PM CEST 2026 - Iteration: 6
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:41:30 PM CEST 2026 - Iteration: 7
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:42:00 PM CEST 2026 - Iteration: 8
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:42:30 PM CEST 2026 - Iteration: 9
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:43:00 PM CEST 2026 - Iteration: 10
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:43:30 PM CEST 2026 - Iteration: 11
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:44:00 PM CEST 2026 - Iteration: 12
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:44:30 PM CEST 2026 - Iteration: 13
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:45:00 PM CEST 2026 - Iteration: 14
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:45:30 PM CEST 2026 - Iteration: 15
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:46:00 PM CEST 2026 - Iteration: 16
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:46:30 PM CEST 2026 - Iteration: 17
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:47:00 PM CEST 2026 - Iteration: 18
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:47:30 PM CEST 2026 - Iteration: 19
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:48:00 PM CEST 2026 - Iteration: 20
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:48:30 PM CEST 2026 - Iteration: 21
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:49:00 PM CEST 2026 - Iteration: 22
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:49:30 PM CEST 2026 - Iteration: 23
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:50:00 PM CEST 2026 - Iteration: 24
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:50:30 PM CEST 2026 - Iteration: 25
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:51:00 PM CEST 2026 - Iteration: 26
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:51:30 PM CEST 2026 - Iteration: 27
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:52:00 PM CEST 2026 - Iteration: 28
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:52:30 PM CEST 2026 - Iteration: 29
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:53:00 PM CEST 2026 - Iteration: 30
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:53:30 PM CEST 2026 - Iteration: 31
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:54:00 PM CEST 2026 - Iteration: 32
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:54:30 PM CEST 2026 - Iteration: 33
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:55:00 PM CEST 2026 - Iteration: 34
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:55:30 PM CEST 2026 - Iteration: 35
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:56:00 PM CEST 2026 - Iteration: 36
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:56:30 PM CEST 2026 - Iteration: 37
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:57:00 PM CEST 2026 - Iteration: 38
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:57:30 PM CEST 2026 - Iteration: 39
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:58:00 PM CEST 2026 - Iteration: 40
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:58:30 PM CEST 2026 - Iteration: 41
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:59:00 PM CEST 2026 - Iteration: 42
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 06:59:30 PM CEST 2026 - Iteration: 43
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:00:00 PM CEST 2026 - Iteration: 44
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:00:30 PM CEST 2026 - Iteration: 45
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:01:00 PM CEST 2026 - Iteration: 46
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:01:30 PM CEST 2026 - Iteration: 47
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:02:00 PM CEST 2026 - Iteration: 48
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:02:30 PM CEST 2026 - Iteration: 49
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:03:00 PM CEST 2026 - Iteration: 50
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:03:30 PM CEST 2026 - Iteration: 51
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:04:00 PM CEST 2026 - Iteration: 52
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:04:30 PM CEST 2026 - Iteration: 53
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:05:00 PM CEST 2026 - Iteration: 54
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:05:30 PM CEST 2026 - Iteration: 55
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:06:00 PM CEST 2026 - Iteration: 56
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:06:30 PM CEST 2026 - Iteration: 57
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:07:00 PM CEST 2026 - Iteration: 58
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:07:30 PM CEST 2026 - Iteration: 59
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:08:00 PM CEST 2026 - Iteration: 60
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:08:30 PM CEST 2026 - Iteration: 61
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:09:00 PM CEST 2026 - Iteration: 62
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:09:30 PM CEST 2026 - Iteration: 63
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:10:00 PM CEST 2026 - Iteration: 64
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:10:30 PM CEST 2026 - Iteration: 65
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:11:00 PM CEST 2026 - Iteration: 66
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:11:30 PM CEST 2026 - Iteration: 67
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:12:00 PM CEST 2026 - Iteration: 68
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:12:30 PM CEST 2026 - Iteration: 69
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:13:00 PM CEST 2026 - Iteration: 70
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:13:30 PM CEST 2026 - Iteration: 71
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:14:00 PM CEST 2026 - Iteration: 72
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:14:30 PM CEST 2026 - Iteration: 73
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:15:00 PM CEST 2026 - Iteration: 74
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:15:30 PM CEST 2026 - Iteration: 75
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:16:00 PM CEST 2026 - Iteration: 76
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:16:30 PM CEST 2026 - Iteration: 77
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:17:00 PM CEST 2026 - Iteration: 78
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:17:30 PM CEST 2026 - Iteration: 79
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:18:01 PM CEST 2026 - Iteration: 80
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:18:31 PM CEST 2026 - Iteration: 81
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:19:01 PM CEST 2026 - Iteration: 82
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:19:31 PM CEST 2026 - Iteration: 83
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:20:01 PM CEST 2026 - Iteration: 84
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:20:31 PM CEST 2026 - Iteration: 85
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:21:01 PM CEST 2026 - Iteration: 86
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:21:31 PM CEST 2026 - Iteration: 87
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:22:01 PM CEST 2026 - Iteration: 88
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:22:31 PM CEST 2026 - Iteration: 89
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:23:01 PM CEST 2026 - Iteration: 90
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:23:31 PM CEST 2026 - Iteration: 91
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:24:01 PM CEST 2026 - Iteration: 92
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:24:31 PM CEST 2026 - Iteration: 93
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:25:01 PM CEST 2026 - Iteration: 94
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:25:31 PM CEST 2026 - Iteration: 95
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:26:01 PM CEST 2026 - Iteration: 96
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:26:31 PM CEST 2026 - Iteration: 97
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:27:01 PM CEST 2026 - Iteration: 98
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:27:31 PM CEST 2026 - Iteration: 99
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:28:01 PM CEST 2026 - Iteration: 100
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:28:31 PM CEST 2026 - Iteration: 101
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:29:01 PM CEST 2026 - Iteration: 102
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:29:31 PM CEST 2026 - Iteration: 103
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:30:01 PM CEST 2026 - Iteration: 104
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:30:31 PM CEST 2026 - Iteration: 105
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:31:01 PM CEST 2026 - Iteration: 106
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:31:31 PM CEST 2026 - Iteration: 107
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:32:01 PM CEST 2026 - Iteration: 108
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:32:31 PM CEST 2026 - Iteration: 109
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:33:01 PM CEST 2026 - Iteration: 110
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:33:31 PM CEST 2026 - Iteration: 111
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:34:01 PM CEST 2026 - Iteration: 112
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:34:31 PM CEST 2026 - Iteration: 113
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:35:01 PM CEST 2026 - Iteration: 114
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:35:31 PM CEST 2026 - Iteration: 115
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:36:01 PM CEST 2026 - Iteration: 116
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:36:31 PM CEST 2026 - Iteration: 117
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:37:01 PM CEST 2026 - Iteration: 118
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:37:31 PM CEST 2026 - Iteration: 119
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:38:01 PM CEST 2026 - Iteration: 120
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:38:31 PM CEST 2026 - Iteration: 121
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:39:01 PM CEST 2026 - Iteration: 122
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:39:31 PM CEST 2026 - Iteration: 123
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:40:01 PM CEST 2026 - Iteration: 124
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:40:31 PM CEST 2026 - Iteration: 125
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:41:01 PM CEST 2026 - Iteration: 126
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:41:31 PM CEST 2026 - Iteration: 127
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:42:01 PM CEST 2026 - Iteration: 128
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:42:31 PM CEST 2026 - Iteration: 129
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:43:01 PM CEST 2026 - Iteration: 130
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:43:31 PM CEST 2026 - Iteration: 131
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:44:01 PM CEST 2026 - Iteration: 132
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:44:31 PM CEST 2026 - Iteration: 133
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:45:01 PM CEST 2026 - Iteration: 134
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:45:31 PM CEST 2026 - Iteration: 135
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:46:01 PM CEST 2026 - Iteration: 136
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:46:31 PM CEST 2026 - Iteration: 137
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:47:01 PM CEST 2026 - Iteration: 138
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:47:31 PM CEST 2026 - Iteration: 139
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:48:01 PM CEST 2026 - Iteration: 140
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:48:31 PM CEST 2026 - Iteration: 141
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:49:01 PM CEST 2026 - Iteration: 142
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:49:31 PM CEST 2026 - Iteration: 143
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:50:01 PM CEST 2026 - Iteration: 144
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:50:31 PM CEST 2026 - Iteration: 145
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:51:01 PM CEST 2026 - Iteration: 146
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:51:31 PM CEST 2026 - Iteration: 147
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:52:01 PM CEST 2026 - Iteration: 148
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:52:31 PM CEST 2026 - Iteration: 149
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:53:01 PM CEST 2026 - Iteration: 150
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:53:31 PM CEST 2026 - Iteration: 151
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:54:01 PM CEST 2026 - Iteration: 152
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:54:31 PM CEST 2026 - Iteration: 153
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:55:01 PM CEST 2026 - Iteration: 154
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:55:31 PM CEST 2026 - Iteration: 155
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:56:01 PM CEST 2026 - Iteration: 156
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:56:31 PM CEST 2026 - Iteration: 157
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:57:01 PM CEST 2026 - Iteration: 158
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:57:31 PM CEST 2026 - Iteration: 159
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:58:01 PM CEST 2026 - Iteration: 160
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:58:31 PM CEST 2026 - Iteration: 161
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:59:01 PM CEST 2026 - Iteration: 162
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 07:59:31 PM CEST 2026 - Iteration: 163
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:00:01 PM CEST 2026 - Iteration: 164
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:00:31 PM CEST 2026 - Iteration: 165
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:01:01 PM CEST 2026 - Iteration: 166
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:01:31 PM CEST 2026 - Iteration: 167
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:02:01 PM CEST 2026 - Iteration: 168
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:02:31 PM CEST 2026 - Iteration: 169
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:03:01 PM CEST 2026 - Iteration: 170
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:03:31 PM CEST 2026 - Iteration: 171
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:04:01 PM CEST 2026 - Iteration: 172
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:04:31 PM CEST 2026 - Iteration: 173
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:05:01 PM CEST 2026 - Iteration: 174
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:05:31 PM CEST 2026 - Iteration: 175
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:06:01 PM CEST 2026 - Iteration: 176
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:06:31 PM CEST 2026 - Iteration: 177
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:07:01 PM CEST 2026 - Iteration: 178
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:07:31 PM CEST 2026 - Iteration: 179
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:08:01 PM CEST 2026 - Iteration: 180
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:08:31 PM CEST 2026 - Iteration: 181
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:09:02 PM CEST 2026 - Iteration: 182
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:09:32 PM CEST 2026 - Iteration: 183
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:10:02 PM CEST 2026 - Iteration: 184
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:10:32 PM CEST 2026 - Iteration: 185
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:11:02 PM CEST 2026 - Iteration: 186
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:11:32 PM CEST 2026 - Iteration: 187
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:12:02 PM CEST 2026 - Iteration: 188
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:12:32 PM CEST 2026 - Iteration: 189
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:13:02 PM CEST 2026 - Iteration: 190
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:13:32 PM CEST 2026 - Iteration: 191
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:14:02 PM CEST 2026 - Iteration: 192
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:14:32 PM CEST 2026 - Iteration: 193
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:15:02 PM CEST 2026 - Iteration: 194
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:15:32 PM CEST 2026 - Iteration: 195
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:16:02 PM CEST 2026 - Iteration: 196
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:16:32 PM CEST 2026 - Iteration: 197
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:17:02 PM CEST 2026 - Iteration: 198
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:17:32 PM CEST 2026 - Iteration: 199
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:18:02 PM CEST 2026 - Iteration: 200
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:18:32 PM CEST 2026 - Iteration: 201
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:19:02 PM CEST 2026 - Iteration: 202
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:19:32 PM CEST 2026 - Iteration: 203
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:20:02 PM CEST 2026 - Iteration: 204
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:20:32 PM CEST 2026 - Iteration: 205
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:21:02 PM CEST 2026 - Iteration: 206
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:21:32 PM CEST 2026 - Iteration: 207
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:22:02 PM CEST 2026 - Iteration: 208
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:22:32 PM CEST 2026 - Iteration: 209
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:23:02 PM CEST 2026 - Iteration: 210
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:23:32 PM CEST 2026 - Iteration: 211
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:24:02 PM CEST 2026 - Iteration: 212
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:24:32 PM CEST 2026 - Iteration: 213
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:25:02 PM CEST 2026 - Iteration: 214
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:25:32 PM CEST 2026 - Iteration: 215
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:26:02 PM CEST 2026 - Iteration: 216
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:26:32 PM CEST 2026 - Iteration: 217
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:27:02 PM CEST 2026 - Iteration: 218
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:27:32 PM CEST 2026 - Iteration: 219
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:28:02 PM CEST 2026 - Iteration: 220
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:28:32 PM CEST 2026 - Iteration: 221
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:29:02 PM CEST 2026 - Iteration: 222
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:29:32 PM CEST 2026 - Iteration: 223
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:30:02 PM CEST 2026 - Iteration: 224
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:30:32 PM CEST 2026 - Iteration: 225
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:31:02 PM CEST 2026 - Iteration: 226
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:31:32 PM CEST 2026 - Iteration: 227
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:32:02 PM CEST 2026 - Iteration: 228
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:32:32 PM CEST 2026 - Iteration: 229
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:33:02 PM CEST 2026 - Iteration: 230
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:33:32 PM CEST 2026 - Iteration: 231
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:34:02 PM CEST 2026 - Iteration: 232
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:34:32 PM CEST 2026 - Iteration: 233
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:35:02 PM CEST 2026 - Iteration: 234
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:35:32 PM CEST 2026 - Iteration: 235
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:36:02 PM CEST 2026 - Iteration: 236
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:36:32 PM CEST 2026 - Iteration: 237
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:37:02 PM CEST 2026 - Iteration: 238
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:37:32 PM CEST 2026 - Iteration: 239
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:38:02 PM CEST 2026 - Iteration: 240
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:38:32 PM CEST 2026 - Iteration: 241
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:39:02 PM CEST 2026 - Iteration: 242
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:39:32 PM CEST 2026 - Iteration: 243
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:40:02 PM CEST 2026 - Iteration: 244
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:40:32 PM CEST 2026 - Iteration: 245
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:41:02 PM CEST 2026 - Iteration: 246
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:41:32 PM CEST 2026 - Iteration: 247
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:42:02 PM CEST 2026 - Iteration: 248
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:42:32 PM CEST 2026 - Iteration: 249
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:43:02 PM CEST 2026 - Iteration: 250
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:43:32 PM CEST 2026 - Iteration: 251
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:44:02 PM CEST 2026 - Iteration: 252
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:44:32 PM CEST 2026 - Iteration: 253
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:45:02 PM CEST 2026 - Iteration: 254
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:45:32 PM CEST 2026 - Iteration: 255
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:46:02 PM CEST 2026 - Iteration: 256
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:46:32 PM CEST 2026 - Iteration: 257
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:47:02 PM CEST 2026 - Iteration: 258
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:47:32 PM CEST 2026 - Iteration: 259
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:48:02 PM CEST 2026 - Iteration: 260
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:48:32 PM CEST 2026 - Iteration: 261
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:49:02 PM CEST 2026 - Iteration: 262
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:49:32 PM CEST 2026 - Iteration: 263
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:50:02 PM CEST 2026 - Iteration: 264
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:50:32 PM CEST 2026 - Iteration: 265
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:51:02 PM CEST 2026 - Iteration: 266
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:51:32 PM CEST 2026 - Iteration: 267
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:52:02 PM CEST 2026 - Iteration: 268
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:52:32 PM CEST 2026 - Iteration: 269
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:53:02 PM CEST 2026 - Iteration: 270
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:53:32 PM CEST 2026 - Iteration: 271
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:54:02 PM CEST 2026 - Iteration: 272
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:54:32 PM CEST 2026 - Iteration: 273
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:55:02 PM CEST 2026 - Iteration: 274
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:55:32 PM CEST 2026 - Iteration: 275
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:56:02 PM CEST 2026 - Iteration: 276
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:56:32 PM CEST 2026 - Iteration: 277
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:57:02 PM CEST 2026 - Iteration: 278
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:57:32 PM CEST 2026 - Iteration: 279
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:58:02 PM CEST 2026 - Iteration: 280
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:58:32 PM CEST 2026 - Iteration: 281
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:59:02 PM CEST 2026 - Iteration: 282
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 08:59:32 PM CEST 2026 - Iteration: 283
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:00:03 PM CEST 2026 - Iteration: 284
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:00:33 PM CEST 2026 - Iteration: 285
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:01:03 PM CEST 2026 - Iteration: 286
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:01:33 PM CEST 2026 - Iteration: 287
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:02:03 PM CEST 2026 - Iteration: 288
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:02:33 PM CEST 2026 - Iteration: 289
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:03:03 PM CEST 2026 - Iteration: 290
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:03:33 PM CEST 2026 - Iteration: 291
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:04:03 PM CEST 2026 - Iteration: 292
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:04:33 PM CEST 2026 - Iteration: 293
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:05:03 PM CEST 2026 - Iteration: 294
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:05:33 PM CEST 2026 - Iteration: 295
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:06:03 PM CEST 2026 - Iteration: 296
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:06:33 PM CEST 2026 - Iteration: 297
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:07:03 PM CEST 2026 - Iteration: 298
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:07:33 PM CEST 2026 - Iteration: 299
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:08:03 PM CEST 2026 - Iteration: 300
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:08:33 PM CEST 2026 - Iteration: 301
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:09:03 PM CEST 2026 - Iteration: 302
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:09:33 PM CEST 2026 - Iteration: 303
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:10:03 PM CEST 2026 - Iteration: 304
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:10:33 PM CEST 2026 - Iteration: 305
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:11:03 PM CEST 2026 - Iteration: 306
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:11:33 PM CEST 2026 - Iteration: 307
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:12:03 PM CEST 2026 - Iteration: 308
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:12:33 PM CEST 2026 - Iteration: 309
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:13:03 PM CEST 2026 - Iteration: 310
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:13:33 PM CEST 2026 - Iteration: 311
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:14:03 PM CEST 2026 - Iteration: 312
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:14:33 PM CEST 2026 - Iteration: 313
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:15:03 PM CEST 2026 - Iteration: 314
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:15:33 PM CEST 2026 - Iteration: 315
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:16:03 PM CEST 2026 - Iteration: 316
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:16:33 PM CEST 2026 - Iteration: 317
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:17:03 PM CEST 2026 - Iteration: 318
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:17:33 PM CEST 2026 - Iteration: 319
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:18:03 PM CEST 2026 - Iteration: 320
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:18:33 PM CEST 2026 - Iteration: 321
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:19:03 PM CEST 2026 - Iteration: 322
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:19:33 PM CEST 2026 - Iteration: 323
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:20:03 PM CEST 2026 - Iteration: 324
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:20:33 PM CEST 2026 - Iteration: 325
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:21:03 PM CEST 2026 - Iteration: 326
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:21:33 PM CEST 2026 - Iteration: 327
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:22:03 PM CEST 2026 - Iteration: 328
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:22:33 PM CEST 2026 - Iteration: 329
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:23:03 PM CEST 2026 - Iteration: 330
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:23:33 PM CEST 2026 - Iteration: 331
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:24:03 PM CEST 2026 - Iteration: 332
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:24:33 PM CEST 2026 - Iteration: 333
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:25:03 PM CEST 2026 - Iteration: 334
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:25:33 PM CEST 2026 - Iteration: 335
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:26:03 PM CEST 2026 - Iteration: 336
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:26:33 PM CEST 2026 - Iteration: 337
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:27:03 PM CEST 2026 - Iteration: 338
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:27:33 PM CEST 2026 - Iteration: 339
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:28:03 PM CEST 2026 - Iteration: 340
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:28:33 PM CEST 2026 - Iteration: 341
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:29:03 PM CEST 2026 - Iteration: 342
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:29:33 PM CEST 2026 - Iteration: 343
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:30:03 PM CEST 2026 - Iteration: 344
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:30:33 PM CEST 2026 - Iteration: 345
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:31:03 PM CEST 2026 - Iteration: 346
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:31:33 PM CEST 2026 - Iteration: 347
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:32:03 PM CEST 2026 - Iteration: 348
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:32:33 PM CEST 2026 - Iteration: 349
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:33:03 PM CEST 2026 - Iteration: 350
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:33:33 PM CEST 2026 - Iteration: 351
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:34:03 PM CEST 2026 - Iteration: 352
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:34:33 PM CEST 2026 - Iteration: 353
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:35:03 PM CEST 2026 - Iteration: 354
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:35:33 PM CEST 2026 - Iteration: 355
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:36:03 PM CEST 2026 - Iteration: 356
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:36:33 PM CEST 2026 - Iteration: 357
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:37:03 PM CEST 2026 - Iteration: 358
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:37:33 PM CEST 2026 - Iteration: 359
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:38:03 PM CEST 2026 - Iteration: 360
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:38:33 PM CEST 2026 - Iteration: 361
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:39:03 PM CEST 2026 - Iteration: 362
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:39:33 PM CEST 2026 - Iteration: 363
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:40:03 PM CEST 2026 - Iteration: 364
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:40:33 PM CEST 2026 - Iteration: 365
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:41:03 PM CEST 2026 - Iteration: 366
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:41:33 PM CEST 2026 - Iteration: 367
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:42:03 PM CEST 2026 - Iteration: 368
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:42:33 PM CEST 2026 - Iteration: 369
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:43:03 PM CEST 2026 - Iteration: 370
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:43:33 PM CEST 2026 - Iteration: 371
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:44:03 PM CEST 2026 - Iteration: 372
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:44:33 PM CEST 2026 - Iteration: 373
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:45:03 PM CEST 2026 - Iteration: 374
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:45:33 PM CEST 2026 - Iteration: 375
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:46:03 PM CEST 2026 - Iteration: 376
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:46:33 PM CEST 2026 - Iteration: 377
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:47:03 PM CEST 2026 - Iteration: 378
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:47:33 PM CEST 2026 - Iteration: 379
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:48:03 PM CEST 2026 - Iteration: 380
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:48:33 PM CEST 2026 - Iteration: 381
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:49:03 PM CEST 2026 - Iteration: 382
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:49:33 PM CEST 2026 - Iteration: 383
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:50:03 PM CEST 2026 - Iteration: 384
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:50:33 PM CEST 2026 - Iteration: 385
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:51:04 PM CEST 2026 - Iteration: 386
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:51:34 PM CEST 2026 - Iteration: 387
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:52:04 PM CEST 2026 - Iteration: 388
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:52:34 PM CEST 2026 - Iteration: 389
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:53:04 PM CEST 2026 - Iteration: 390
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:53:34 PM CEST 2026 - Iteration: 391
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:54:04 PM CEST 2026 - Iteration: 392
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:54:34 PM CEST 2026 - Iteration: 393
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:55:04 PM CEST 2026 - Iteration: 394
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:55:34 PM CEST 2026 - Iteration: 395
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:56:04 PM CEST 2026 - Iteration: 396
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:56:34 PM CEST 2026 - Iteration: 397
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:57:04 PM CEST 2026 - Iteration: 398
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:57:34 PM CEST 2026 - Iteration: 399
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:58:04 PM CEST 2026 - Iteration: 400
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:58:34 PM CEST 2026 - Iteration: 401
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:59:04 PM CEST 2026 - Iteration: 402
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 09:59:34 PM CEST 2026 - Iteration: 403
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:00:04 PM CEST 2026 - Iteration: 404
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:00:34 PM CEST 2026 - Iteration: 405
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:01:04 PM CEST 2026 - Iteration: 406
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:01:34 PM CEST 2026 - Iteration: 407
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:02:04 PM CEST 2026 - Iteration: 408
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:02:34 PM CEST 2026 - Iteration: 409
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:03:04 PM CEST 2026 - Iteration: 410
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:03:34 PM CEST 2026 - Iteration: 411
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:04:04 PM CEST 2026 - Iteration: 412
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:04:34 PM CEST 2026 - Iteration: 413
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:05:04 PM CEST 2026 - Iteration: 414
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:05:34 PM CEST 2026 - Iteration: 415
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:06:04 PM CEST 2026 - Iteration: 416
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:06:34 PM CEST 2026 - Iteration: 417
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:07:04 PM CEST 2026 - Iteration: 418
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:07:34 PM CEST 2026 - Iteration: 419
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:08:04 PM CEST 2026 - Iteration: 420
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:08:34 PM CEST 2026 - Iteration: 421
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:09:04 PM CEST 2026 - Iteration: 422
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:09:34 PM CEST 2026 - Iteration: 423
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:10:04 PM CEST 2026 - Iteration: 424
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:10:34 PM CEST 2026 - Iteration: 425
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:11:04 PM CEST 2026 - Iteration: 426
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:11:34 PM CEST 2026 - Iteration: 427
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:12:04 PM CEST 2026 - Iteration: 428
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:12:34 PM CEST 2026 - Iteration: 429
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:13:04 PM CEST 2026 - Iteration: 430
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:13:34 PM CEST 2026 - Iteration: 431
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:14:04 PM CEST 2026 - Iteration: 432
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:14:34 PM CEST 2026 - Iteration: 433
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:15:04 PM CEST 2026 - Iteration: 434
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:15:34 PM CEST 2026 - Iteration: 435
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:16:04 PM CEST 2026 - Iteration: 436
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:16:34 PM CEST 2026 - Iteration: 437
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:17:04 PM CEST 2026 - Iteration: 438
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:17:34 PM CEST 2026 - Iteration: 439
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:18:04 PM CEST 2026 - Iteration: 440
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:18:34 PM CEST 2026 - Iteration: 441
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:19:04 PM CEST 2026 - Iteration: 442
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:19:34 PM CEST 2026 - Iteration: 443
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:20:04 PM CEST 2026 - Iteration: 444
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:20:34 PM CEST 2026 - Iteration: 445
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:21:04 PM CEST 2026 - Iteration: 446
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:21:34 PM CEST 2026 - Iteration: 447
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:22:04 PM CEST 2026 - Iteration: 448
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:22:34 PM CEST 2026 - Iteration: 449
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:23:04 PM CEST 2026 - Iteration: 450
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:23:34 PM CEST 2026 - Iteration: 451
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:24:04 PM CEST 2026 - Iteration: 452
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:24:34 PM CEST 2026 - Iteration: 453
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:25:04 PM CEST 2026 - Iteration: 454
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:25:34 PM CEST 2026 - Iteration: 455
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:26:04 PM CEST 2026 - Iteration: 456
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:26:34 PM CEST 2026 - Iteration: 457
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:27:04 PM CEST 2026 - Iteration: 458
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:27:34 PM CEST 2026 - Iteration: 459
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:28:04 PM CEST 2026 - Iteration: 460
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:28:34 PM CEST 2026 - Iteration: 461
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:29:04 PM CEST 2026 - Iteration: 462
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:29:34 PM CEST 2026 - Iteration: 463
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:30:04 PM CEST 2026 - Iteration: 464
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:30:34 PM CEST 2026 - Iteration: 465
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:31:04 PM CEST 2026 - Iteration: 466
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:31:34 PM CEST 2026 - Iteration: 467
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:32:04 PM CEST 2026 - Iteration: 468
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:32:34 PM CEST 2026 - Iteration: 469
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:33:04 PM CEST 2026 - Iteration: 470
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:33:34 PM CEST 2026 - Iteration: 471
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:34:04 PM CEST 2026 - Iteration: 472
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:34:34 PM CEST 2026 - Iteration: 473
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:35:04 PM CEST 2026 - Iteration: 474
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:35:34 PM CEST 2026 - Iteration: 475
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:36:04 PM CEST 2026 - Iteration: 476
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:36:34 PM CEST 2026 - Iteration: 477
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:37:04 PM CEST 2026 - Iteration: 478
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:37:34 PM CEST 2026 - Iteration: 479
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:38:04 PM CEST 2026 - Iteration: 480
+-----------------------------
+> 
+--- Incoming MQTT Message ---
+Topic: portenta/sensor
+Message: Hello, World! Thu May 21 10:38:34 PM CEST 2026 - Iteration: 481
+-----------------------------
+> 
